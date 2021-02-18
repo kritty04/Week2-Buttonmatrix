@@ -43,7 +43,8 @@
 UART_HandleTypeDef huart2;
 
 /* USER CODE BEGIN PV */
-
+uint32_t ButtonMatrixTimestamp = 0;
+uint16_t ButtonMatrixState ;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -51,7 +52,7 @@ void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_USART2_UART_Init(void);
 /* USER CODE BEGIN PFP */
-
+void ButtonMatrixUpdate(void);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -96,6 +97,7 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+	  ButtonMatrixUpdate();
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -255,8 +257,39 @@ static void MX_GPIO_Init(void)
 
 }
 
-/* USER CODE BEGIN 4 */
+/* USER CODE BEGIN 4 *///input 0-3, output4-7
+GPIO_TypeDef* Buttonmatrixport[8] = {GPIOA,GPIOB,GPIOB,GPIOB,GPIOA,GPIOC,GPIOB,GPIOA};
+uint16_t ButtonMatrixPin[8] = {GPIO_PIN_10,GPIO_PIN_3,GPIO_PIN_5,GPIO_PIN_4,GPIO_PIN_9,GPIO_PIN_7,GPIO_PIN_6,GPIO_PIN_7};
+uint16_t ButtonMatrixRow = 0; // R
+void ButtonMatrixUpdate()
+{
+ if(HAL_GetTick()-ButtonMatrixTimestamp>=100)
+ {
+	 ButtonMatrixTimestamp = HAL_GetTick();
+	 int i;
+	 for(i=0;i<4;++i)
+		 {
+			 GPIO_PinState PinState=HAL_GPIO_ReadPin(Buttonmatrixport[i], ButtonMatrixPin[i]);
+			 if(PinState==GPIO_PIN_RESET) //button Press
+				 {
+					 ButtonMatrixState |=(uint16_t)0x01<<(i+ButtonMatrixRow*4);
+				 }
+			 else
+				 {
+					 ButtonMatrixState &=~((uint16_t)0x01<<(i+ButtonMatrixRow*4));
+				 }
 
+		 }
+	 uint8_t NowOutputPin = ButtonMatrixRow +4;
+	 // SetRn
+	 HAL_GPIO_WritePin(Buttonmatrixport[NowOutputPin], ButtonMatrixPin[NowOutputPin], GPIO_PIN_SET);
+	 // update newrow
+	 ButtonMatrixRow=(ButtonMatrixRow+1)%4;
+	 uint8_t NextOutputPin=ButtonMatrixRow +4;
+	 // reset row+1
+	 HAL_GPIO_WritePin(Buttonmatrixport[NextOutputPin], ButtonMatrixPin[NextOutputPin], GPIO_PIN_RESET);
+ }
+}
 /* USER CODE END 4 */
 
 /**
