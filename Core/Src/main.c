@@ -44,7 +44,11 @@ UART_HandleTypeDef huart2;
 
 /* USER CODE BEGIN PV */
 uint32_t ButtonMatrixTimestamp = 0;
-uint16_t ButtonMatrixState ;
+uint16_t ButtonMatrixState[2] ;
+uint32_t password[32] = {} ;
+uint32_t thispassword[32] = {} ;
+uint8_t num=0;
+uint8_t state=1 ;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -91,13 +95,229 @@ int main(void)
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
 
+password[0] = 6 ;
+password[1] = 2 ;
+password[2] = 3 ;
+password[3] =4  ;
+  password[4] = 0 ;
+  password[5] = 5 ;
+  password[6] = 0 ;
+  password[7] =  0;
+ password[8] =  0;
+  password[9] =  3;
+  password[10] =  6;
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
+  { if (num>=32)
   {
+	  num=0;
+  }
 	  ButtonMatrixUpdate();
+	  switch (state)
+	  { case 0 :
+		  switch (ButtonMatrixState[0])
+		  {
+		  case 0:
+			  switch (ButtonMatrixState[1])
+			  {
+			  case 1 :
+				  ButtonMatrixState[1]=0;
+				  password[num]=7 ;
+				  num+=1;
+				  break;
+			  case 2 :
+				  ButtonMatrixState[1]=0;
+				  password[num]=8 ;
+				  num+=1;
+				  break;
+			  case 4 :
+				  ButtonMatrixState[1]=0;
+				  password[num]=9 ;
+				  num+=1;
+				  break;
+			  case 8 :
+				  ButtonMatrixState[1]=0;
+				  int i;
+				  for (i = 0; i < 32; ++i)
+				  {
+				    password[i] = 0;
+				  }
+				  num=0;
+				  break;
+			  case 16 :
+				  ButtonMatrixState[1]=0;
+				  password[num]=4 ;
+				  num+=1;
+				  break;
+			  case 32 :
+				  ButtonMatrixState[1]=0;
+				  password[num]=5 ;
+				  num+=1;
+				  break;
+			  case 64 :
+				  ButtonMatrixState[1]=0;
+				  password[num]=6 ;
+				  num+=1;
+				  break;
+			  case 128 :
+				  ButtonMatrixState[1]=0;
+				  num-=1;
+				  password[num]=0;
+				  break ;
+			  case 256 :
+				  ButtonMatrixState[1]=0;
+				  password[num]=1 ;
+				  num+=1;
+				  break;
+			  case 512 :
+				  ButtonMatrixState[1]=0;
+				  password[num]=2 ;
+				  num+=1;
+				  break;
+			  case 1024 :
+				  ButtonMatrixState[1]=0;
+				  password[num]=3 ;
+				  num+=1;
+				  break;
+			  case 2048 :
+				  ButtonMatrixState[1]=0;
+				  break;
+			  case 4096 :
+				  ButtonMatrixState[1]=0;
+				  password[num]=0 ;
+				  num+=1;
+				  break;
+			  case 8192 :
+				  ButtonMatrixState[1]=0;
+				  break;
+			  case 16384 :
+				  ButtonMatrixState[1]=0;
+				  break;
+			  case 32768 :
+				  ButtonMatrixState[1]=0;
+				  state=state+1;
+				  num=0;
+				  break;
+
+			  }
+		  }
+		case 1 :
+			switch (ButtonMatrixState[0])
+					  {
+					  case 0:
+						  switch (ButtonMatrixState[1])
+						  {
+						  case 1 :
+							  ButtonMatrixState[1]=0;
+							  thispassword[num]=7 ;
+							  num+=1;
+							  break;
+						  case 2 :
+							  ButtonMatrixState[1]=0;
+							  thispassword[num]=8 ;
+							  num+=1;
+							  break;
+						  case 4 :
+							  ButtonMatrixState[1]=0;
+							  thispassword[num]=9 ;
+							  num+=1;
+							  break;
+						  case 8 :
+							  ButtonMatrixState[1]=0;
+							  int i;
+							  for (i = 0; i < 32; ++i)
+							  {
+							    thispassword[i] = 0;
+							  }
+							  num=0;
+							  break;
+						  case 16 :
+							  ButtonMatrixState[1]=0;
+							  thispassword[num]=4 ;
+							  num+=1;
+							  break;
+						  case 32 :
+							  ButtonMatrixState[1]=0;
+							  thispassword[num]=5 ;
+							  num+=1;
+							  break;
+						  case 64 :
+							  ButtonMatrixState[1]=0;
+							  thispassword[num]=6 ;
+							  num+=1;
+							  break;
+						  case 128 :
+							  ButtonMatrixState[1]=0;
+							  num-=1;
+							  thispassword[num]=0;
+							  break ;
+						  case 256 :
+							  ButtonMatrixState[1]=0;
+							  thispassword[num]=1 ;
+							  num+=1;
+							  break;
+						  case 512 :
+							  ButtonMatrixState[1]=0;
+							  thispassword[num]=2 ;
+							  num+=1;
+							  break;
+						  case 1024 :
+							  ButtonMatrixState[1]=0;
+							  thispassword[num]=3 ;
+							  num+=1;
+							  break;
+						  case 2048 :
+							  ButtonMatrixState[1]=0;
+							  break;
+						  case 4096 :
+							  ButtonMatrixState[1]=0;
+							  thispassword[num]=0 ;
+							  num+=1;
+							  break;
+						  case 8192 :
+							  ButtonMatrixState[1]=0;
+							  break;
+						  case 16384 :
+							  ButtonMatrixState[1]=0;
+							  break;
+						  case 32768 :
+							  ButtonMatrixState[1]=0;
+//							  if (thispassword==password){
+//							  state=state-1;
+//							  num=0;
+//							  }
+							  int o;
+							  int x=0;
+							  for (o = 0; o < 32; ++o)
+							  {
+							  if(password[o] == thispassword[o])
+							  {
+								  x=x+1;
+							  }
+							  }
+
+							  if (x==32)
+							  {
+								  state=state-1;
+							  num=0;}
+							  x=0;
+							  break;
+
+						  }
+					  }
+	  }
+	  if (state ==0 )
+	  {
+		  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, 0);
+	  }
+	  else
+	  {
+		  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, 1);
+	  }
+
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -257,14 +477,14 @@ static void MX_GPIO_Init(void)
 
 }
 
-/* USER CODE BEGIN 4 *///input 0-3, output4-7
+/* USER CODE BEGIN 4 */
 GPIO_TypeDef* Buttonmatrixport[8] = {GPIOA,GPIOB,GPIOB,GPIOB,GPIOA,GPIOC,GPIOB,GPIOA};
 uint16_t ButtonMatrixPin[8] = {GPIO_PIN_10,GPIO_PIN_3,GPIO_PIN_5,GPIO_PIN_4,GPIO_PIN_9,GPIO_PIN_7,GPIO_PIN_6,GPIO_PIN_7};
 uint16_t ButtonMatrixRow = 0; // R
 void ButtonMatrixUpdate()
 {
- if(HAL_GetTick()-ButtonMatrixTimestamp>=100)
- {
+ if(HAL_GetTick()-ButtonMatrixTimestamp>=50)
+ {	ButtonMatrixState[1]=ButtonMatrixState[0];
 	 ButtonMatrixTimestamp = HAL_GetTick();
 	 int i;
 	 for(i=0;i<4;++i)
@@ -272,11 +492,11 @@ void ButtonMatrixUpdate()
 			 GPIO_PinState PinState=HAL_GPIO_ReadPin(Buttonmatrixport[i], ButtonMatrixPin[i]);
 			 if(PinState==GPIO_PIN_RESET) //button Press
 				 {
-					 ButtonMatrixState |=(uint16_t)0x01<<(i+ButtonMatrixRow*4);
+					 ButtonMatrixState[0] |=(uint16_t)0x01<<(i+ButtonMatrixRow*4);
 				 }
 			 else
 				 {
-					 ButtonMatrixState &=~((uint16_t)0x01<<(i+ButtonMatrixRow*4));
+					 ButtonMatrixState[0] &=~((uint16_t)0x01<<(i+ButtonMatrixRow*4));
 				 }
 
 		 }
